@@ -123,9 +123,12 @@ public class LavaBoat extends SlimefunItem implements Listener {
     @EventHandler
     public void onCombust(EntityCombustEvent e) {
         //Fireproof the LavaBoat item
-        SlimefunItem sfItem = SlimefunItem.getById("IDOE_LAVABOAT");
-        if (sfItem instanceof LavaBoat) {
-            e.setCancelled(true);
+        if (e.getEntity() instanceof Item item) {
+            SlimefunItem sfItem = SlimefunItem.getByItem(item.getItemStack());
+            if (sfItem instanceof LavaBoat) {
+                e.setCancelled(true);
+                return;
+            }
         }
 
         //Make sure player is only checked if driving a lava_boat
@@ -133,8 +136,6 @@ public class LavaBoat extends SlimefunItem implements Listener {
             if (p.isInsideVehicle() && p.getVehicle() instanceof Boat boat && boat.hasMetadata("lava_boat")) {
                 e.setCancelled(true);
                 p.setFireTicks(0);
-            } else {
-                e.setCancelled(false);
             }
         }
 
